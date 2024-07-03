@@ -22,6 +22,7 @@ import MongoDBInfo from './Components/infoModals/MongoDBInfo';
 import ExpressServer from './Components/infoModals/ExpressServer';
 import ReactInfo from './Components/infoModals/ReactInfo';
 import GoogleCloudInfo from './Components/infoModals/GoogleCloudInfo';
+import JoinUp from './Pages/JoinUp';
 
 
 function App() {
@@ -70,6 +71,8 @@ function App() {
                     <Route path='/users/update/:userId' element={<EditSelf />} />
                     <Route path='/admin/users/:userId' element={<EditUser />} />
                     <Route path='/failedlogin' element={<FailedLogin />} />
+                    <Route path='/joinup' element={<JoinUp />} />
+                    
                     <Route path='*' element={<NotFound />} />
                 </Routes>
             </div>

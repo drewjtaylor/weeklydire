@@ -66,7 +66,9 @@ const Homepage = ({resetGuide}) => {
             <Col md="6" className="mb-5" key={article._id}>
                 {/* If an article is designated premiumOnly, use the "ArticleCardLocked component with no link instead" */}
                 {article.premiumOnly ? 
-                <ArticleCardLocked article={article}/> : 
+                <Link to='/joinup'>
+                    <ArticleCardLocked article={article}/>
+                </Link> : 
                 <Link to={`/read/${article._id}`}>
                     <ArticleCard key={article._id} article={article} />
                 </Link>

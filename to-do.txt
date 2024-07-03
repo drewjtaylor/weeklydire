@@ -3,8 +3,8 @@ Update article schema to designate if it's premium-only - done
 Update user schema to designate if they are premium members - done
 Make front end check if current user is premium - done
 Premium links offer link to premium on mouseover - done
+Create a "Sorry, you must be a premium member for this content" page - done
 Update how homepage links display to show a lock symbol IF user is not premium
-Create a "Sorry, you must be a premium member for this content" page
 On backend, change routing to check if user is premium and block them if they're not.
 Update admin page to let admins turn premiumOnly off and on for articles
 Update admin page to turn premium on or off for users
