@@ -6,6 +6,7 @@ import { selectAllDbArticles } from "../backendDbOperations";
 import { Row, Col, Container, Button } from "reactstrap";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import ArticleCardLocked from "../Components/ArticleCardLocked";
 
 const Homepage = ({resetGuide}) => {
   const [articles, setArticles] = useState([]);
@@ -61,11 +62,16 @@ const Homepage = ({resetGuide}) => {
       </Row>
       <Row>
         {displayedArticles.map((article) => {
-          return (
+          return ( 
             <Col md="6" className="mb-5" key={article._id}>
-              <Link to={`/read/${article._id}`}>
-                <ArticleCard key={article._id} article={article} />
-              </Link>
+                {/* If an article is designated premiumOnly, use the "ArticleCardLocked component with no link instead" */}
+                {article.premiumOnly ? 
+                <ArticleCardLocked article={article}/> : 
+                <Link to={`/read/${article._id}`}>
+                    <ArticleCard key={article._id} article={article} />
+                </Link>
+                }
+            
             </Col>
           );
         })}
