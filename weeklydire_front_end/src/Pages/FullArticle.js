@@ -71,8 +71,21 @@ const FullArticle = () => {
     return <Loading />;
   }
 
+  if (!userFromContext.premiumUser && article.premiumOnly) {
+    return (
+        <Container>
+            <Row>
+                <Col>
+                To see this content, please <Link to={'/joinup'}>upgrade to a premium account</Link>.
+                </Col>
+            </Row>
+        </Container>
+    )
+  }
+
   if (article) {
-    const { body, title, thumbnail } = article;
+    const { body, title, thumbnail, tags } = article;
+
     return (
       <Container>
         <Row className="mt-3">
@@ -114,9 +127,9 @@ const FullArticle = () => {
         <Row className="mb-3">
           <Col>
             Tags:{" "}
-            {article.tags.length === 0
+            {tags.length === 0
               ? "There are no tags for this article."
-              : article.tags.map((tag, index, fullList) => {
+              : tags.map((tag, index, fullList) => {
                   return index === fullList.length - 1 ? (
                     <Link
                       to={`/read/tags/${tag}`}
