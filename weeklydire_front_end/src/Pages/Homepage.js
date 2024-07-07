@@ -2,13 +2,16 @@ import ArticleCard from "../Components/ArticleCard";
 import Loading from "../Components/Loading";
 import Error from "../Components/Error";
 import TagSearchBar from "../Components/TagSearchBar";
+import { UserContext } from "../utils/UserContext";
 import { selectAllDbArticles } from "../backendDbOperations";
 import { Row, Col, Container, Button } from "reactstrap";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import ArticleCardLocked from "../Components/ArticleCardLocked";
 
 const Homepage = ({resetGuide}) => {
+
+  const [userFromContext] = useContext(UserContext);
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -65,7 +68,7 @@ const Homepage = ({resetGuide}) => {
           return ( 
             <Col md="6" className="mb-5" key={article._id}>
                 {/* If an article is designated premiumOnly, use the "ArticleCardLocked component with no link instead" */}
-                {article.premiumOnly ? 
+                {article.premiumOnly && !userFromContext.premiumUser ? 
                 <Link to='/joinup'>
                     <ArticleCardLocked article={article}/>
                 </Link> : 
