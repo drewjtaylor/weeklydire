@@ -9,6 +9,7 @@ const dotenv = require('dotenv').config();
 const userRouter = require('./routes/usersRouter');
 const commentRouter = require('./routes/commentsRouter');
 const articleRouter = require('./routes/articlesRouter');
+const paypalRouter = require('./routes/paypalRouter');
 const config = require('./config');
 
 const hostname = 'localhost';
@@ -64,6 +65,7 @@ app.use(passport.initialize());
 app.use('/users', userRouter);
 app.use('/comments', commentRouter);
 app.use('/articles', articleRouter);
+app.use('/paypal', paypalRouter);
 
 // Establish folder for static files
 app.use(express.static(__dirname + '/public'));
