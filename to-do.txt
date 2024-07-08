@@ -8,7 +8,10 @@ Update how homepage links display to show a lock symbol IF user is not premium
 Update admin page to let admins turn premiumOnly off and on for articles
 Update admin page to turn premium on or off for users
 On backend, change routing to check if user is premium and block them if they're not.
-(Possibly a new branch) - Create a page to use paypal to upgrade to premium
+
+
+Paypal branch
+Create a page to congratulate the user on being a premium member, or use paypal to upgrade the current user to premium
 
 
 
