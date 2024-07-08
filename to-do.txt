@@ -12,7 +12,7 @@ On backend, change routing to check if user is premium and block them if they're
 
 Paypal branch
 Create a page to congratulate the user on being a premium member, or use paypal to upgrade the current user to premium
-
+Reference: https://www.google.com/search?q=mern+paypal&oq=mern+paypal&gs_lcrp=EgZjaHJvbWUyCQgAEEUYORigATIHCAEQIRigATIHCAIQIRigATIHCAMQIRigATIHCAQQIRigATIHCAUQIRifBTIHCAYQIRifBdIBCDEyNDdqMGo0qAIAsAIB&sourceid=chrome&ie=UTF-8#fpstate=ive&vld=cid:b8aea060,vid:UqS2ymaC4F4,st:0
 
 
 SPECIFIC TO editArticle branch:
