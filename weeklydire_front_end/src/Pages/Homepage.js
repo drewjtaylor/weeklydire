@@ -81,9 +81,13 @@ const Homepage = ({resetGuide}) => {
           );
         })}
       </Row>
-      {displayedArticles.length >= articles.length ? null : 
-            <Button color="primary" onClick={handleLoadMoreArticles}>Load more</Button>
-        }
+      <Row>
+          <Col className="text-center" >
+              {displayedArticles.length >= articles.length ? null :
+                    <Button className="mb-3" color="primary" onClick={handleLoadMoreArticles}>Wow, those are inspiring! Load more!</Button>
+                }
+          </Col>
+      </Row>
     </Container>
   );
 };
