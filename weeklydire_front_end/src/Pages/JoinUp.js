@@ -1,6 +1,9 @@
 import {Container, Col, Row} from 'reactstrap';
+import PaypalBox from '../Components/PaypalBox';
 
 const JoinUp = () => {
+
+
   return (
     <Container>
         <Row>
@@ -11,7 +14,7 @@ const JoinUp = () => {
         </Row>
         <Row>
             <Col>
-
+                <PaypalBox />
             </Col>
         </Row>
 

@@ -5,20 +5,22 @@ const passport = require("passport");
 const authenticate = require("../authenticate");
 const dotenv = require('dotenv').config();
 
-const paypalClientId = process.env.PAYPALCLIENTID;
+const paypalClientId = process.env.PAYPAL_CLIENT_ID;
 const paypalSecretKey = process.env.PAYPALSECRETKEY;
 
 
 const paypalOptions = {
-    "client-id": paypalClientId,
+    clientId: paypalClientId,
     currency: "USD",
     intent: "capture",
 }
 
-// Retrieve all non-deleted articles
-paypalRouter
+paypalRouter.route('/api/config')
+    .get((req, res, next) => {
+        res.json(paypalOptions);
+    })
 
-    .route('/premiumCheck')
+paypalRouter.route('/premiumCheck')
     .get(authenticate.verifyUser, (req, res, next) => {
 
         if (req.user.premiumUser) {
