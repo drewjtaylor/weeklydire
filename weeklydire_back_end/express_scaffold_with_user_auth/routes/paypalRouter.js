@@ -4,10 +4,12 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const authenticate = require("../authenticate");
 const dotenv = require('dotenv').config();
+const fetch = require('node-fetch');
 
 const paypalClientId = process.env.PAYPAL_CLIENT_ID;
-const paypalSecretKey = process.env.PAYPALSECRETKEY;
+const paypalSecretKey = process.env.PAYPAL_SECRET_KEY;
 
+const paypalApiUrl = "https://api-m.sandbox.paypal.com"
 
 const paypalOptions = {
     clientId: paypalClientId,
@@ -29,134 +31,6 @@ paypalRouter.route('/premiumCheck')
         }
         res.end('Check console for paypal info')
     })
-//   .route("/")
-//   .get((req, res, next) => {
-//     Article.find()
-//       .then((articles) => {
-//         if (!articles) {
-//           res.statusCode = 200;
-//           res.end("There were no articles in the database");
-//         };
-//         const activeArticles = articles.filter(
-//           (article) => article.deleted === false
-//         );
-//         res.statusCode = 200;
-//         res.setHeader("Content-Type", "application/json");
-//         res.json(activeArticles);
-//       })
-//       .catch((err) => next(err));
-//   })
-//   // Create a new article. Requires user to be a creator
-//   .post(
-//     authenticate.verifyUser,
-//     authenticate.verifyCreator,
-//     (req, res, next) => {
-//       const creatorId = req.user._id;
-//       const { body, title, thumbnail, tags } = req.body;
-//       if (body && title) {
-//         Article.create({ body, title, thumbnail, tags, creator: creatorId })
-//           .then((article) => {
-//             res.statusCode = 200;
-//             res.setHeader("Content-Type", "application/json");
-//             res.json(article);
-//           })
-//           .catch((err) => next(err));
-//       } else {
-//         const err = new Error(
-//           'The body of the request must at least contain a "body" and "title".'
-//         );
-//         err.statusCode = 400;
-//         return next(err);
-//       }
-//     }
-//   )
-//   .put((req, res) => {
-//     res.statusCode = 403;
-//     res.end(
-//       'PUT operation not supported on articles. If you would like to edit an article, use "/articles/[articleId]" with a PUT request.'
-//     );
-//   })
-//   .delete((req, res, next) => {
-//     res.statusCode = 403;
-//     res.end("DELETE operation not supported on /articles.");
-//   });
-
-// // Retrieve deleted articles
-// paypalRouter
-//   .route("/deleted")
-//   .get((req, res, next) => {
-//     Article.find()
-//       .then((articles) => {
-//         if (!articles) {
-//           res.statusCode = 200;
-//           res.end("There were no deleted articles in the database");
-//         };
-//         const activeArticles = articles.filter(
-//           (article) => article.deleted
-//         );
-//         res.statusCode = 200;
-//         res.setHeader("Content-Type", "application/json");
-//         res.json(activeArticles);
-//       })
-//       .catch((err) => next(err));
-//   })
-
-
-// paypalRouter
-//   .route("/:articleId")
-//   .get((req, res, next) => {
-//     Article.findById(req.params.articleId)
-//       .populate("creator")
-//       .then((article) => {
-//         if (!article) {
-//           res.statusCode = 200;
-//           res.end("No article found with this _id");
-//         }
-//         if (article.deleted) {
-//           res.statusCode = 404;
-//           res.end("This article has been removed.");
-//         }
-//         res.statusCode = 200;
-//         res.setHeader("Content-Type", "application/json");
-//         res.json(article);
-//       })
-//       .catch((err) => next(err));
-//   })
-//   .post((req, res, next) => {
-//     res.statusCode = 403;
-//     res.end(
-//       `POST operation not supported on /articles/${req.params.articleId}.`
-//     );
-//   })
-// .put(
-//     authenticate.verifyUser,
-//     (req, res, next) => {
-//       const { body, title, thumbnail, tags } = req.body;
-//       if (body && title) {
-//         Article.findById(req.params.articleId)
-//         .then(article => {
-//             if (article.creator.equals(req.user._id)) {
-//                 Article.findByIdAndUpdate(req.params.articleId, { body, title, thumbnail, tags})
-//                 .then((article) => {
-//                   res.statusCode = 200;
-//                   res.setHeader("Content-Type", "application/json");
-//                   res.json(article);
-//                 })
-//                 .catch((err) => next(err));
-//             } else {
-//                 res.statusCode = 403;
-//                 res.end(`You must be the author to edit the article with ID: ${req.params.articleId}`)
-//             }
-//         })
-//       } else {
-//         const err = new Error(
-//           'The body of the request must at least contain a "body" and "title".'
-//         );
-//         err.statusCode = 400;
-//         return next(err);
-//       }
-//     }
-//   )
 
 
 
@@ -165,128 +39,147 @@ paypalRouter.route('/premiumCheck')
 
 
 
+    // Copied below from paypalserver
 
-//   // Fully deletes article at "articleId". Requires user to be an admin or the author
-//   // "soft" delete can be achieved using /articles/softDelete/:articleId
-//   .delete(authenticate.verifyUser, (req, res, next) => {
-//     Article.findById(req.params.articleId)
-//       .then((article) => {
-//         if (req.user.admin || article.creator.equals(req.user._id)) {
-//           Article.findByIdAndDelete(req.params.articleId)
-//             .then((article) => {
-//               res.statusCode = 200;
-//               res.setHeader("Content-Type", "text/json");
-//               res.json(article);
-//             })
-//             .catch((err) => next(err));
-//         } else {
-//           const err = new Error(
-//             "You must be an admin or the creator of this article to delete it."
-//           );
-//           return next(err);
-//         }
-//       })
-//       .catch((err) => {
-//         res.statusCode = 400;
-//         res.end(
-//           `There was an error performing DELETE at /articles/${req.params.articleId}`
-//         );
-//       });
-//   })
-//   .patch(authenticate.verifyUser, (req, res, next) => {
-//     Article.findById(req.params.articleId)
-//       .then((article) => {
-//         if (req.user.admin || article.creator.equals(req.user._id)) {
-//           Article.findByIdAndUpdate(req.params.articleId, {
-//             deleted: true,
-//           })
-//             .then((article) => {
-//               res.statusCode = 200;
-//               res.setHeader("Content-Type", "text/json");
-//               res.json(article);
-//             })
-//             .catch((err) => next(err));
-//         } else {
-//           const err = new Error(
-//             "You must be an admin or the creator of this article to delete it."
-//           );
-//           return next(err);
-//         }
-//       })
-//       .catch((err) => {
-//         res.statusCode = 403;
-//         res.end(
-//           `There was an error performing DELETE at /articles/${req.params.articleId}`
-//         );
-//       });
-//   });
+/*{generateAccessToken}*/
 
-// paypalRouter
-//   .route("/softDelete/:articleId")
-//   .get((req, res, next) => {
-//     res.statusCode = 403;
-//     res.end("GET operation not supported at this route.");
-//   })
-//   .post((req, res, next) => {
-//     res.statusCode = 403;
-//     res.end("POST operation not supported at this route.");
-//   })
-//   // Used to restore a "soft" deleted article by changing "deleted" to false
-//   .patch(authenticate.verifyUser, (req, res, next) => {
-//     Article.findById(req.params.articleId)
-//       .then((article) => {
-//         if (req.user.admin || article.creator.equals(req.user._id)) {
-//           Article.findByIdAndUpdate(req.params.articleId, {
-//             deleted: false,
-//           })
-//             .then((article) => {
-//               res.statusCode = 200;
-//               res.setHeader("Content-Type", "text/json");
-//               res.json(article);
-//             })
-//             .catch((err) => next(err));
-//         } else {
-//           const err = new Error(
-//             "You must be an admin or the creator of this article to restore it."
-//           );
-//           return next(err);
-//         }
-//       })
-//       .catch((err) => {
-//         res.statusCode = 403;
-//         res.end(
-//           `There was an error performing PATCH at /articles/softDelete/${req.params.articleId}`
-//         );
-//       });
-//   })
-//   // Soft deletes article at "articleId". Requires user to be an admin or the author
-//   // Full delete can be achieved by just using /articles/:articleId
-//   .delete(authenticate.verifyUser, (req, res, next) => {
-//     Article.findById(req.params.articleId)
-//       .then((article) => {
-//         if (req.user.admin || article.creator.equals(req.user._id)) {
-//           Article.findByIdAndUpdate(req.params.articleId, {
-//             deleted: true,
-//           })
-//             .then((article) => {
-//               res.statusCode = 200;
-//               res.setHeader("Content-Type", "text/json");
-//               res.json(article);
-//             })
-//             .catch((err) => next(err));
-//         } else {
-//           const err = new Error(
-//             "You must be an admin or the creator of this article to delete it."
-//           );
-//           return next(err);
-//         }
-//       })
-//       .catch((err) => {
-//         res.statusCode = 403;
-//         res.end(
-//           `There was an error performing DELETE at /articles/softDelete/${req.params.articleId}`
-//         );
-//       });
-//   });
+const generateAccessToken = async () => {
+    const authUrl = 'https://api-m.sandbox.paypal.com/v1/oauth2/token';
+    const clientIdAndSecret = `${paypalClientId}:${paypalSecretKey}`;
+    const base64 = Buffer.from(clientIdAndSecret).toString('base64');
+
+    return fetch(authUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json',
+            'Accept-Language': 'en_US',
+            'Authorization': `Basic ${base64}`,
+        },
+        body: 'grant_type=client_credentials'
+    })
+    .then(response => response.json())
+    .then(data => data.access_token)
+    .catch(() => console.log("Couldn't get auth token."))
+}
+
+async function handleResponse(response) {
+    try {
+      const jsonResponse = await response.json();
+      return {
+        jsonResponse,
+        httpStatusCode: response.status,
+      };
+    } catch (err) {
+      const errorMessage = await response.text();
+      throw new Error(errorMessage);
+    }
+  }
+  
+  /**
+   * Create an order to start the transaction.
+   * @see https://developer.paypal.com/docs/api/orders/v2/#orders_create
+   */
+  const createOrder = async (cart) => {
+    // use the cart information passed from the front-end to calculate the purchase unit details
+    console.log(
+      "shopping cart information passed from the frontend createOrder() callback:",
+      cart
+    );
+  
+    const accessToken = await generateAccessToken();
+    console.log('access token is ' + accessToken);
+    const url = paypalApiUrl + `/v2/checkout/orders`;
+  
+    const payload = {
+      intent: "CAPTURE",
+      purchase_units: [
+        {
+          amount: {
+            currency_code: "USD",
+            value: "100"
+          }
+        }
+      ]
+    };
+
+
+    const response = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+        // Uncomment one of these to force an error for negative testing (in sandbox mode only).
+        // Documentation: https://developer.paypal.com/tools/sandbox/negative-testing/request-headers/
+        // "PayPal-Mock-Response": '{"mock_application_codes": "MISSING_REQUIRED_PARAMETER"}'
+        // "PayPal-Mock-Response": '{"mock_application_codes": "PERMISSION_DENIED"}'
+        // "PayPal-Mock-Response": '{"mock_application_codes": "INTERNAL_SERVER_ERROR"}'
+      },
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+  
+    return handleResponse(response);
+  };
+  
+  // createOrder route
+  paypalRouter.route('/api/orders')
+  .post(async (req, res) => {
+    try {
+      // use the cart information passed from the front-end to calculate the order amount detals
+      const { cart } = req.body;
+      const { jsonResponse, httpStatusCode } = await createOrder(cart);
+      console.log(jsonResponse)
+      res.status(httpStatusCode).json(jsonResponse);
+    } catch (error) {
+      console.error("Failed to create order:", error);
+      res.status(500).json({ error: "Failed to create order." });
+    }
+  });
+  
+  /**
+   * Capture payment for the created order to complete the transaction.
+   * @see https://developer.paypal.com/docs/api/orders/v2/#orders_capture
+   */
+  const captureOrder = async (orderID) => {
+    const accessToken = await generateAccessToken();
+    console.log('Access token:');
+    console.log(accessToken);
+    const url = `${paypalApiUrl}/v2/checkout/orders/${orderID}/capture`;
+  
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+        // Uncomment one of these to force an error for negative testing (in sandbox mode only).
+        // Documentation:
+        // https://developer.paypal.com/tools/sandbox/negative-testing/request-headers/
+        // "PayPal-Mock-Response": '{"mock_application_codes": "INSTRUMENT_DECLINED"}'
+        // "PayPal-Mock-Response": '{"mock_application_codes": "TRANSACTION_REFUSED"}'
+        // "PayPal-Mock-Response": '{"mock_application_codes": "INTERNAL_SERVER_ERROR"}'
+      },
+    });
+  
+    return handleResponse(response);
+  };
+  
+  // captureOrder route
+  paypalRouter.route('/api/orders/:orderID/capture')
+  .post(async (req, res) => {
+    try {
+      const { orderID } = req.params;
+      const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
+      res.status(httpStatusCode).json(jsonResponse);
+    } catch (error) {
+      console.error("Failed to create order:", error);
+      res.status(500).json({ error: "Failed to capture order." });
+    }
+  }); 
+  
+  // serve index.html
+  paypalRouter.route('/')
+  .get((req, res) => {
+    res.sendFile(path.resolve("./checkout.html"));
+  });
 
 module.exports = paypalRouter;

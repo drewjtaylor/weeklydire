@@ -36,7 +36,7 @@ const PaypalBox = () => {
           }}
           createOrder={async () => {
             try {
-              const response = await fetch(dbUrl + "paypal/api/orders", {
+              const response = await fetch(dbUrl + "/paypal/api/orders", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -46,7 +46,7 @@ const PaypalBox = () => {
                 body: JSON.stringify({
                   cart: [
                     {
-                      id: "Permanent Premium Subscription",
+                      id: "Permanent_Premium_Subscription",
                     //   quantity: "YOUR_PRODUCT_QUANTITY"
                     },
                   ],
