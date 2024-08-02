@@ -116,7 +116,7 @@ async function handleResponse(response) {
       method: "POST",
       body: JSON.stringify(payload),
     });
-  
+
     return handleResponse(response);
   };
   
@@ -166,6 +166,22 @@ async function handleResponse(response) {
     try {
       const { orderID } = req.params;
       const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
+      console.log(httpStatusCode)
+
+        switch (httpStatusCode) {
+            case 201:
+                console.log("ORDER CAPTURED, DO CODE THINGS HERE TO CHANGE ACCOUNT TO PREMIUM")
+                break
+            case 500:
+                console.log("There was an internal error. Please try refreshing the page and trying again. If you continue to have issues, please contact us.")
+                break
+            case 422:
+                console.log("The transaction failed. Either the transaction was refused, or the payment instrument was declined.")
+                break
+            default:
+                console.log("Default case triggered. Need case/switch statement on paypalRouter for httpStatusCode" + httpStatusCode)
+        }
+
       res.status(httpStatusCode).json(jsonResponse);
     } catch (error) {
       console.error("Failed to create order:", error);
