@@ -11,6 +11,8 @@ On backend, change routing to check if user is premium and block them if they're
 
 
 Paypal branch
+Add code to actually update a user on the back end to premium on success (paypalrouter, line ~175)
+Remove/update paypal status message at the bottom of the /joinup route
 If a user is already premium, don't let them get to the "joinup" page as an extra protection
 Optional--also block transactions from going through if a user is premium already
 
