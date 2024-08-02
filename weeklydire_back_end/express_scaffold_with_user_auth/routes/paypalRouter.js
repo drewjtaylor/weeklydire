@@ -88,7 +88,6 @@ async function handleResponse(response) {
     );
   
     const accessToken = await generateAccessToken();
-    console.log('access token is ' + accessToken);
     const url = paypalApiUrl + `/v2/checkout/orders`;
   
     const payload = {
@@ -125,7 +124,7 @@ async function handleResponse(response) {
   paypalRouter.route('/api/orders')
   .post(async (req, res) => {
     try {
-      // use the cart information passed from the front-end to calculate the order amount detals
+      // use the cart information passed from the front-end to calculate the order amount details
       const { cart } = req.body;
       const { jsonResponse, httpStatusCode } = await createOrder(cart);
       console.log(jsonResponse)
@@ -142,8 +141,6 @@ async function handleResponse(response) {
    */
   const captureOrder = async (orderID) => {
     const accessToken = await generateAccessToken();
-    console.log('Access token:');
-    console.log(accessToken);
     const url = `${paypalApiUrl}/v2/checkout/orders/${orderID}/capture`;
   
     const response = await fetch(url, {
@@ -159,10 +156,10 @@ async function handleResponse(response) {
         // "PayPal-Mock-Response": '{"mock_application_codes": "INTERNAL_SERVER_ERROR"}'
       },
     });
-  
+
     return handleResponse(response);
   };
-  
+
   // captureOrder route
   paypalRouter.route('/api/orders/:orderID/capture')
   .post(async (req, res) => {
@@ -176,10 +173,10 @@ async function handleResponse(response) {
     }
   }); 
   
-  // serve index.html
-  paypalRouter.route('/')
-  .get((req, res) => {
-    res.sendFile(path.resolve("./checkout.html"));
-  });
+//   // serve index.html
+//   paypalRouter.route('/')
+//   .get((req, res) => {
+//     res.sendFile(path.resolve("./checkout.html"));
+//   });
 
 module.exports = paypalRouter;
