@@ -18,7 +18,7 @@ const paypalOptions = {
 }
 
 paypalRouter.route('/api/config')
-    .get((req, res, next) => {
+    .get(authenticate.verifyUser, (req, res, next) => {
         res.json(paypalOptions);
     })
 
@@ -31,10 +31,6 @@ paypalRouter.route('/premiumCheck')
         }
         res.end('Check console for paypal info')
     })
-
-
-
-
 
 
 
@@ -82,10 +78,11 @@ async function handleResponse(response) {
    */
   const createOrder = async (cart) => {
     // use the cart information passed from the front-end to calculate the purchase unit details
-    console.log(
-      "shopping cart information passed from the frontend createOrder() callback:",
-      cart
-    );
+
+    // console.log(
+    //   "shopping cart information passed from the frontend createOrder() callback:",
+    //   cart
+    // );
   
     const accessToken = await generateAccessToken();
     const url = paypalApiUrl + `/v2/checkout/orders`;
@@ -96,7 +93,7 @@ async function handleResponse(response) {
         {
           amount: {
             currency_code: "USD",
-            value: "100"
+            value: "5"
           }
         }
       ]
@@ -122,7 +119,10 @@ async function handleResponse(response) {
   
   // createOrder route
   paypalRouter.route('/api/orders')
-  .post(async (req, res) => {
+  // Added authenticate.verifyuser to make sure someone is logged in
+  .post(
+    async (req, res) => {
+
     try {
       // use the cart information passed from the front-end to calculate the order amount details
       const { cart } = req.body;
@@ -161,16 +161,19 @@ async function handleResponse(response) {
   };
 
   // captureOrder route
-  paypalRouter.route('/api/orders/:orderID/capture')
+  paypalRouter.route(`/api/orders/:orderID/capture/:userId`)
+  // Added authenticate.verifyUser to make sure a user is logged in and provide user._id
   .post(async (req, res) => {
     try {
-      const { orderID } = req.params;
+      const { orderID, userId } = req.params;
       const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
       console.log(httpStatusCode)
 
         switch (httpStatusCode) {
             case 201:
                 console.log("ORDER CAPTURED, DO CODE THINGS HERE TO CHANGE ACCOUNT TO PREMIUM")
+                console.log(`The user ID is ${userId}`);
+
                 break
             case 500:
                 console.log("There was an internal error. Please try refreshing the page and trying again. If you continue to have issues, please contact us.")

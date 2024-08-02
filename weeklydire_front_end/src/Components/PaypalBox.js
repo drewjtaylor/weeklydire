@@ -1,7 +1,7 @@
 // Source: https://developer.paypal.com/studio/checkout/standard/integrate
 
-
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../utils/UserContext";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { dbUrl } from "../utils/dbUrl";
 
@@ -10,19 +10,21 @@ function Message({ content }) {
   return <p>{content}</p>;
 }
 
-const PaypalBox = () => {
-  const initialOptions = {
-    "client-id":
-      "AbVAgM7FO8L2uvoXcTf8NrN_NUYlXo9qTQ_KDG_VFXazTJmpHgu7XzYHqA2QbghGrQvGHzMIZaz3qgqx",
-    "enable-funding": "venmo",
-    "disable-funding": "",
-    currency: "USD",
-    "data-page-type": "product-details",
-    components: "buttons",
-    "data-sdk-integration-source": "developer-studio",
-  };
 
-  const [message, setMessage] = useState("");
+const PaypalBox = () => {
+    const initialOptions = {
+        "client-id":
+        "AbVAgM7FO8L2uvoXcTf8NrN_NUYlXo9qTQ_KDG_VFXazTJmpHgu7XzYHqA2QbghGrQvGHzMIZaz3qgqx",
+        "enable-funding": "venmo",
+        "disable-funding": "",
+        currency: "USD",
+        "data-page-type": "product-details",
+        components: "buttons",
+        "data-sdk-integration-source": "developer-studio",
+    };
+
+    const [currentUser] = useContext(UserContext);
+    const [message, setMessage] = useState("");
 
   return (
     <div className="App">
@@ -47,6 +49,11 @@ const PaypalBox = () => {
                   cart: [
                     {
                       id: "Permanent_Premium_Subscription",
+                      userInfo: {
+                        firstName: currentUser.firstName,
+                        lastName: currentUser.lastName,
+                        userId: currentUser._id
+                      }
                     //   quantity: "YOUR_PRODUCT_QUANTITY"
                     },
                   ],
@@ -76,7 +83,7 @@ const PaypalBox = () => {
           ) => {
             try {
               const response = await fetch(
-                `${dbUrl}/paypal/api/orders/${data.orderID}/capture`,
+                `${dbUrl}/paypal/api/orders/${data.orderID}/capture/${currentUser._id}`,
                 {
                   method: "POST",
                   headers: {
@@ -110,11 +117,11 @@ const PaypalBox = () => {
                 setMessage(
                   `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
                 );
-                console.log(
-                  "Capture result",
-                  orderData,
-                  JSON.stringify(orderData, null, 2)
-                );
+                // console.log(
+                //   "Capture result",
+                //   orderData,
+                //   JSON.stringify(orderData, null, 2)
+                // );
               }
             } catch (error) {
               console.error(error);
