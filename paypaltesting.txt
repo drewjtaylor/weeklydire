@@ -1,0 +1,21 @@
+Paypal developer stuff for testing
+
+Weeklydire client ID
+AbVAgM7FO8L2uvoXcTf8NrN_NUYlXo9qTQ_KDG_VFXazTJmpHgu7XzYHqA2QbghGrQvGHzMIZaz3qgqx
+
+
+Sandbox personal account login email
+sb-y9mnz15819321@personal.example.com
+
+Sandbox personal account password
+lX/cacA5
+
+
+
+Sandbox credit card:
+4032038090928221
+
+Credit card expiry:
+04/2027
+
+CVC Code: Any 3 digits
