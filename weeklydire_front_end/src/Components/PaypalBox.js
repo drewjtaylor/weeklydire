@@ -1,7 +1,7 @@
+// The bulk of this code was copied from the guides at the paypal developer studio
 // Source: https://developer.paypal.com/studio/checkout/standard/integrate
 
 import React, { useState } from "react";
-import { UserContext } from "../utils/UserContext";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { dbUrl } from "../utils/dbUrl";
 
@@ -9,7 +9,6 @@ import { dbUrl } from "../utils/dbUrl";
 function Message({ content }) {
   return <p>{content}</p>;
 }
-
 
 const PaypalBox = ({currentUser}) => {
     const initialOptions = {
@@ -24,7 +23,6 @@ const PaypalBox = ({currentUser}) => {
     };
 
     const [message, setMessage] = useState("");
-
 
   return (
     <div className="paypal-box">
@@ -82,8 +80,6 @@ const PaypalBox = ({currentUser}) => {
                 actions
             ) => {
                 try {
-                    console.log('current user id is: ');
-                    console.log(currentUser._ID)
                 const response = await fetch(
                     `${dbUrl}/paypal/api/orders/${data.orderID}/capture/${currentUser._id}`,
                     {
@@ -119,11 +115,6 @@ const PaypalBox = ({currentUser}) => {
                     setMessage(
                     `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
                     );
-                    // console.log(
-                    //   "Capture result",
-                    //   orderData,
-                    //   JSON.stringify(orderData, null, 2)
-                    // );
                 }
                 } catch (error) {
                 console.error(error);
