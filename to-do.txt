@@ -16,6 +16,7 @@ Remove/update paypal status message at the bottom of the /joinup route
 If a user is already premium, don't let them get to the "joinup" page as an extra protection
 Block order from being created if user is already premium.
 Make publicly visible sandbox account.
+**After a user successfully purchases premium, redirect/refresh the page so they don't keep seeing paypal buttons
 
 
 
