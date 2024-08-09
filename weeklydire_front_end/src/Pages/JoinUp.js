@@ -11,34 +11,35 @@ const JoinUp = () => {
     // If the they're not logged in, have user sign in first
     const NotSignedIn = () => {
         return (
-            <>
+            <div className='text-center'>
                 <h2>We're excited to have you join our premium access team!</h2>
                 <p>Please sign in so we can double check if you already have premium access.</p>
-            </>
+            </div>
         )
     };
 
+    // If a user is premium, show a "Thank you" message instead of the paypal box
     const AlreadyPremium = () => {
         return (
-            <>
-                <h2>Oops! You're already a premium user!</h2>
-                <p>Thanks for supporing us. There's no need to sign up again</p>
-                <p>We're not sure how you got here, but there's no need to purchase your subscription again!</p>
-                <p>Try logging out then logging in again, and try accessing the premium content you were trying to view before.</p>
-            </>
+            <div className='text-center'>
+                <h2>You are a premium user!</h2>
+                <h5>Thanks for supporing our content!</h5>
+            </div>
         )
     }
 
+    // If a user is not premium but IS signed in, show the paypal box
     const SignUpBox = () => {
         return (
             <>
                 <Row>
                     <Col className='text-center'>
-                        <h1>This content is for subscribers only</h1>
-                        <h3>Enjoy premium content today by signing up for a subscription!</h3>
+                        <h1>This content is for premium users only</h1>
+                        <h3>Enjoy premium content today by upgrading!</h3>
                         <p>This project uses the Paypal SDK to facilitate payments.</p>
                         <p>It's set up using Paypal's development sandbox, so no actual money is spent.</p>
-                        <p>Go ahead and try making a payment!</p>
+                        <p>Go ahead and try making a payment using the "sandbox" credit card.</p>
+                        <p>It's a fake but usable card to test paypal transactions.</p>
                     </Col>
                 </Row>
                 <Row>
@@ -50,30 +51,25 @@ const JoinUp = () => {
         )
     }
 
-    let displayedBox;
-
+    // Use Case/Switch to establish what will be displayed bsaed on user status.
+    let displayedContent;
     switch (currentUser.premiumUser) {
         case (undefined):
-            displayedBox = <NotSignedIn />
+            displayedContent = <NotSignedIn />
             break;
         case (false):
-            displayedBox = <SignUpBox />
+            displayedContent = <SignUpBox />
             break;
         case (true):
-            displayedBox = <AlreadyPremium />;
+            displayedContent = <AlreadyPremium />;
             break;
         default:
-            console.log(`There was an error on "JoinUp". The currentUser.premiumUser value is ${currentUser.premiumUser}`)
+            console.error(`There was an error on "JoinUp". The currentUser.premiumUser value is ${currentUser.premiumUser}`)
     }
-
-    console.log(currentUser);
 
         return (
             <Container>
-                {displayedBox}
-                {/* <AlreadyPremium /> */}
-                {/* <SignUpBox /> */}
-                {/* <NotSignedIn /> */}
+                {displayedContent}
             </Container>
         )
 }
