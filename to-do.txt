@@ -14,7 +14,10 @@ Paypal branch
 Add code to actually update a user on the back end to premium on success (paypalrouter, line ~175)
 Remove/update paypal status message at the bottom of the /joinup route
 If a user is already premium, don't let them get to the "joinup" page as an extra protection
-Optional--also block transactions from going through if a user is premium already
+Block order from being created if user is already premium.
+Make publicly visible sandbox account.
+
+
 
 SPECIFIC TO editArticle branch:
 "Myarticles" page now shows user-created articles.
