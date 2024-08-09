@@ -36,10 +36,11 @@ const JoinUp = () => {
                     <Col className='text-center'>
                         <h1>This content is for premium users only</h1>
                         <h3>Enjoy premium content today by upgrading!</h3>
-                        <p>This project uses the Paypal SDK to facilitate payments.</p>
-                        <p>It's set up using Paypal's development sandbox, so no actual money is spent.</p>
-                        <p>Go ahead and try making a payment using the "sandbox" credit card.</p>
-                        <p>It's a fake but usable card to test paypal transactions.</p>
+                        <p className='my-0'>This project uses the Paypal SDK to facilitate payments.</p>
+                        <p className='my-0'>It's set up using Paypal's development sandbox, so no actual money is spent.</p>
+                        <p className='my-0'>You can try making a payment using this "sandbox" credit card:</p>
+                        <p className='my-0'>Email: sb-y9mnz15819321@personal.example.com</p>
+                        <p className='mt-0'>Password: lX/cacA5</p>
                     </Col>
                 </Row>
                 <Row>
