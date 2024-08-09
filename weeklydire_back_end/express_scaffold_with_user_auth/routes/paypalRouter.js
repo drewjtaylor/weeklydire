@@ -5,6 +5,7 @@ const passport = require("passport");
 const authenticate = require("../authenticate");
 const dotenv = require('dotenv').config();
 const fetch = require('node-fetch');
+const User = require('../models/User');
 
 const paypalClientId = process.env.PAYPAL_CLIENT_ID;
 const paypalSecretKey = process.env.PAYPAL_SECRET_KEY;
@@ -162,7 +163,7 @@ async function handleResponse(response) {
 
   // captureOrder route
   paypalRouter.route(`/api/orders/:orderID/capture/:userId`)
-  // Added authenticate.verifyUser to make sure a user is logged in and provide user._id
+  // Added authenticate.verifyUser to make sure a user is logged in and provide user._id?
   .post(async (req, res) => {
     try {
       const { orderID, userId } = req.params;
@@ -171,18 +172,32 @@ async function handleResponse(response) {
 
         switch (httpStatusCode) {
             case 201:
-                console.log("ORDER CAPTURED, DO CODE THINGS HERE TO CHANGE ACCOUNT TO PREMIUM")
+                console.log("ORDER CAPTURED, DO CODE THINGS HERE TO CHANGE ACCOUNT TO PREMIUM");
                 console.log(`The user ID is ${userId}`);
-
+                User.findById(req.params.userId)
+                .then(user => {
+                    User.findByIdAndUpdate(userId,
+                        {
+                            $set: {
+                                premiumUser: true
+                            }
+                        }
+                    )
+                    .then(user => {
+                        user.save()
+                    });
+                    res.statusCode = 200;
+                    res.end(`User ID ${userId} updated successfully to premium. Welcome!`)
+                })
                 break
             case 500:
                 console.log("There was an internal error. Please try refreshing the page and trying again. If you continue to have issues, please contact us.")
                 break
-            case 422:
-                console.log("The transaction failed. Either the transaction was refused, or the payment instrument was declined.")
+                case 422:
+                    console.log("The transaction failed. Either the transaction was refused, or the payment instrument was declined.")
                 break
             default:
-                console.log("Default case triggered. Need case/switch statement on paypalRouter for httpStatusCode" + httpStatusCode)
+                console.log(`Default case triggered in paypal/api/orders/${orderID}/capture. Need case/switch statement on paypalRouter for httpStatusCode` + httpStatusCode)
         }
 
       res.status(httpStatusCode).json(jsonResponse);
