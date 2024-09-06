@@ -117,7 +117,7 @@ const PaypalBox = ({currentUser}) => {
                     // `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
                     // );
                     console.log(`Transaction ${transaction.status}: ${transaction.id}. See console for all available details`)
-                    actions.redirect(baseUrl)
+                    actions.redirect(baseUrl + '/joinup')
                 }
                 } catch (error) {
                 console.error(error);
