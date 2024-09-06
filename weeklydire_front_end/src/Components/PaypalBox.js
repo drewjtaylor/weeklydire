@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { dbUrl } from "../utils/dbUrl";
+import {baseUrl} from "../utils/baseUrl";
 
 // Renders errors or successfull transactions on the screen.
 function Message({ content }) {
@@ -112,9 +113,11 @@ const PaypalBox = ({currentUser}) => {
                     // Or go to another URL:  actions.redirect('thank_you.html');
                     const transaction =
                     orderData.purchase_units[0].payments.captures[0];
-                    setMessage(
-                    `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
-                    );
+                    // setMessage(
+                    // `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
+                    // );
+                    console.log(`Transaction ${transaction.status}: ${transaction.id}. See console for all available details`)
+                    actions.redirect(baseUrl)
                 }
                 } catch (error) {
                 console.error(error);
